@@ -14,12 +14,16 @@ jobs:
     env:
       RAILS_ENV: test
       RACK_ENV: test
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: rails
+      POSTGRES_PORT: 5432
 
     services:
       postgres:
-        image: postgres:13
+        image: postgres
         env:
           POSTGRES_USER: rails
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -47,7 +51,7 @@ jobs:
 
       - name: Grant user privileges
         run: |
-          CREATE USER rails WITH PASSWORD 'password';
+          CREATE USER rails;
           GRANT ALL PRIVILEGES ON ALL DATABASES TO rails;
 
       - name: Bundle install
