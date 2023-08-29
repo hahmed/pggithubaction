@@ -51,6 +51,7 @@ jobs:
 
       - name: Grant user privileges
         run: |
+          sudo systemctl status postgresql
           psql -h 127.0.0.1 -p 5432 -U postgres -c "CREATE USER rails; GRANT ALL PRIVILEGES ON ALL DATABASES TO rails;"
 
       - name: Bundle install
