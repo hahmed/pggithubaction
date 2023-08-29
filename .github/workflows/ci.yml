@@ -14,26 +14,18 @@ jobs:
     env:
       RAILS_ENV: test
       RACK_ENV: test
-      POSTGRES_HOST: 127.0.0.1
-      POSTGRES_USER: rails
-      POSTGRES_PORT: 5432
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPORT: 5432
 
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_USER: rails
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-      # mysql:
-      #   image: mysql:5.7
-      #   env:
-      #     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      #   ports:
-      #     - 3306:3306
-      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout code
@@ -48,11 +40,6 @@ jobs:
         run: |
           sudo apt-get install postgresql-client
           sudo apt-get install libpq-dev
-
-      - name: Grant user privileges
-        run: |
-          sudo systemctl status postgresql
-          psql -h 127.0.0.1 -p 5432 -U postgres -c "CREATE USER rails; GRANT ALL PRIVILEGES ON ALL DATABASES TO rails;"
 
       - name: Bundle install
         run: bundle install --jobs 4 --retry 3
