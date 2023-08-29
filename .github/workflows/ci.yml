@@ -51,8 +51,7 @@ jobs:
 
       - name: Grant user privileges
         run: |
-          CREATE USER rails;
-          GRANT ALL PRIVILEGES ON ALL DATABASES TO rails;
+          psql -h postgres -U root -c "CREATE USER rails; GRANT ALL PRIVILEGES ON ALL DATABASES TO rails;"
 
       - name: Bundle install
         run: bundle install --jobs 4 --retry 3
